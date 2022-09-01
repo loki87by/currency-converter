@@ -1,0 +1,32 @@
+.background {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+}
+
+.background > p {
+  position: absolute;
+  margin: 0;
+  opacity: 0.8;
+  color: goldenrod;
+}
+
+@-webkit-keyframes rain {
+  from {
+    top: 0;
+  }
+  to {
+    top: 100vh;
+  }
+}
+
+@keyframes rain {
+  from {
+    top: 0;
+  }
+  to {
+    top: 100vh;
+  }
+}

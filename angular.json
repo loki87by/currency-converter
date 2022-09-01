@@ -1,0 +1,42 @@
+{
+  "cli": {
+    "analytics": "e9ad5622-513f-41da-8dc6-803b6a260c53"
+  },
+  "version": 1,
+  "projects": {
+    "currencyConverter": {
+      "projectType": "application",
+      "root": "",
+      "sourceRoot": "src",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/currencyConverter",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.json",
+            "aot": true,
+            "styles": [
+              "src/style.css"
+            ],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ]
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "currencyConverter:build",
+            "open": true,
+            "port": 4200
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "currencyConverter"
+}

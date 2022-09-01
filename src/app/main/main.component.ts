@@ -1,0 +1,123 @@
+import { Component, OnInit } from "@angular/core";
+import { getLocalCurrency, getRates, getAllCurrencies } from "../utils/Api";
+import { CurrenciesList, CurrentRates } from "../utils/types";
+
+@Component({
+  selector: "main-comp",
+  template: `<main>
+    <div class="page">
+      <h2>Выберите вашу валюту</h2>
+      <select value="{{ localCurrency }}" (change)="changeCurrency($event)">
+        <option value="{{ localCurrency }}">{{ localCurrency }}</option>
+        <option *ngFor="let item of basedCurrencies" value="{{ item }}">
+          {{ item }}
+        </option>
+      </select>
+      <input
+        type="number"
+        value="{{ baseValue }}"
+        placeholder="Сколько у вас {{ localCurrency }}"
+        [(ngModel)]="baseValue"
+        (input)="changeBaseValue()"
+      />
+      <h2>Выберите нужную валюту</h2>
+      <select
+        value="{{ targetCurrency }}"
+        (change)="changeTargetedCurrency($event)"
+      >
+        <option value="{{ targetCurrency }}">{{ targetCurrency }}</option>
+        <option *ngFor="let item of targetCurrencies" value="{{ item }}">
+          {{ item }}
+        </option>
+      </select>
+      <h3>
+        Вы получите {{ stringifyBigValue(targetValue) }} {{ targetCurrency }}
+      </h3>
+    </div>
+  </main>`,
+  styleUrls: ["./main.component.css"],
+})
+export class MainComponent implements OnInit {
+  currenciesList: CurrenciesList = {};
+  rates: CurrentRates = {};
+  localCurrency: string = "";
+  targetCurrency: string = "USD";
+  baseValue: number = 0;
+  targetValue: number = 0;
+  basedCurrencies: string[] = [];
+  targetCurrencies: string[] = [];
+
+  changeTargetValue(args) {
+    const { thisValue, thisCurrency, thisRates } = args;
+    let currentValue = this.baseValue;
+    let currentCurrency = this.localCurrency;
+    let currentRates = this.rates;
+
+    if (thisValue) {
+      currentValue = thisValue;
+    }
+
+    if (thisCurrency) {
+      currentCurrency = thisCurrency;
+    }
+
+    if (thisRates) {
+      currentRates = thisRates;
+    }
+    const newValue =
+      Math.floor((currentValue / currentRates[currentCurrency]) * 100) / 100;
+    this.targetValue = newValue;
+  }
+
+  changeCurrency(e) {
+    const newValue = e.target.value;
+    this.localCurrency = newValue;
+    this.changeTargetValue({ thisCurrency: this.localCurrency });
+  }
+
+  changeBaseValue() {
+    this.changeTargetValue({ thisValue: this.baseValue });
+  }
+
+  changeTargetedCurrency(e) {
+    const newValue = e.target.value;
+    this.targetCurrency = newValue;
+    getRates(newValue).then((res) => {
+      this.rates = res.rates;
+      this.changeTargetValue({ thisRates: res.rates });
+    });
+  }
+
+  stringifyBigValue(num) {
+    const integer = Math.floor(num);
+    const fraction = (Math.floor((integer - num) * 100) / 100 + "").split(".");
+    const stringifyIntegerArray = `${integer}`.split("");
+
+    if (stringifyIntegerArray.length < 4) {
+      return num;
+    }
+    for (let i = stringifyIntegerArray.length - 4; i >= 0; i -= 3) {
+      stringifyIntegerArray[i] += ",";
+    }
+    const intString = stringifyIntegerArray.join("");
+    return `${intString}.${fraction[1]}`;
+  }
+
+  ngOnInit() {
+    getRates().then((res) => {
+      this.rates = res.rates;
+    });
+    getLocalCurrency().then((res) => {
+      this.localCurrency = res.currency;
+    });
+    getAllCurrencies().then((res) => {
+      this.currenciesList = res.currencies;
+      this.basedCurrencies = Object.keys(res.currencies).filter(
+        (cur) => cur !== this.localCurrency
+      );
+      this.targetCurrencies = Object.keys(res.currencies).filter(
+        (cur) => cur !== this.localCurrency || this.targetCurrency
+      );
+    });
+  }
+}

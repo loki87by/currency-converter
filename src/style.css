@@ -1,0 +1,24 @@
+html {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  --black: #000;
+  --white: #fff;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+h1 {
+  color: var(--white);
+}
+
+a,
+a:visited {
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--white);
+}
