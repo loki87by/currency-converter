@@ -1,0 +1,214 @@
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO";
+  src: local("Bw Modelica Cyrillic DEMO Black"),
+    local("BwModelicaCyrillicDEMO-Black"),
+    url("BwModelicaCyrillicDEMO-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO";
+  src: local("Bw Modelica Cyrillic DEMO Regular"),
+    local("BwModelicaCyrillicDEMO-Regular"),
+    url("BwModelicaCyrillicDEMO-Regular.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO";
+  src: local("Bw Modelica Cyrillic DEMO Bold"),
+    local("BwModelicaCyrillicDEMO-Bold"),
+    url("BwModelicaCyrillicDEMO-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO";
+  src: local("Bw Modelica Cyrillic DEMO Thin"),
+    local("BwModelicaCyrillicDEMO-Thin"),
+    url("BwModelicaCyrillicDEMO-Thin.woff2") format("woff2");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO";
+  src: local("Bw Modelica Cyrillic DEMO Regular Italic"),
+    local("BwModelicaCyrillicDEMO-RegularItalic"),
+    url("BwModelicaCyrillicDEMO-RegularItalic.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO";
+  src: local("Bw Modelica Cyrillic DEMO Medium"),
+    local("BwModelicaCyrillicDEMO-Medium"),
+    url("BwModelicaCyrillicDEMO-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO ExBd";
+  src: local("Bw Modelica Cyrillic DEMO Extra Bold Italic"),
+    local("BwModelicaCyrillicDEMO-ExtraBoldItalic"),
+    url("BwModelicaCyrillicDEMO-ExtraBoldItalic.woff2") format("woff2");
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO Hairline";
+  src: local("Bw Modelica Cyrillic DEMO Hairline Italic"),
+    local("BwModelicaCyrillicDEMO-HairlineItalic"),
+    url("BwModelicaCyrillicDEMO-HairlineItalic.woff2") format("woff2");
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO";
+  src: local("Bw Modelica Cyrillic DEMO Thin Italic"),
+    local("BwModelicaCyrillicDEMO-ThinItalic"),
+    url("BwModelicaCyrillicDEMO-ThinItalic.woff2") format("woff2");
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO";
+  src: local("Bw Modelica Cyrillic DEMO Bold Italic"),
+    local("BwModelicaCyrillicDEMO-BoldItalic"),
+    url("BwModelicaCyrillicDEMO-BoldItalic.woff2") format("woff2");
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO Hairline";
+  src: local("Bw Modelica Cyrillic DEMO Hairline"),
+    local("BwModelicaCyrillicDEMO-Hairline"),
+    url("BwModelicaCyrillicDEMO-Hairline.woff2") format("woff2");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO";
+  src: local("Bw Modelica Cyrillic DEMO Black Italic"),
+    local("BwModelicaCyrillicDEMO-BlackItalic"),
+    url("BwModelicaCyrillicDEMO-BlackItalic.woff2") format("woff2");
+  font-weight: 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO";
+  src: local("Bw Modelica Cyrillic DEMO Light"),
+    local("BwModelicaCyrillicDEMO-Light"),
+    url("BwModelicaCyrillicDEMO-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO ExBd";
+  src: local("Bw Modelica Cyrillic DEMO Extra Bold"),
+    local("BwModelicaCyrillicDEMO-ExtraBold"),
+    url("BwModelicaCyrillicDEMO-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO";
+  src: local("Bw Modelica Cyrillic DEMO Medium Italic"),
+    local("BwModelicaCyrillicDEMO-MediumItalic"),
+    url("BwModelicaCyrillicDEMO-MediumItalic.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Bw Modelica Cyrillic DEMO";
+  src: local("Bw Modelica Cyrillic DEMO Light Italic"),
+    local("BwModelicaCyrillicDEMO-LightItalic"),
+    url("BwModelicaCyrillicDEMO-LightItalic.woff2") format("woff2");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: local("Open Sans Light"), local("OpenSans-Light"),
+    url("opensanslight.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: local("Open Sans Light Italic"), local("OpenSansLight-Italic"),
+    url("opensanslightitalic.woff2") format("woff2");
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: local("Open Sans"), local("OpenSans"),
+    url("opensans.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: local("Open Sans Italic"), local("OpenSans-Italic"),
+    url("opensansitalic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: local("Open Sans Semibold"), local("OpenSans-Semibold"),
+    url("opensanssemibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: local("Open Sans Semibold Italic"), local("OpenSans-SemiboldItalic"),
+    url("opensanssemibolditalic.woff2") format("woff2");
+  font-weight: 600;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: local("Open Sans Bold"), local("OpenSans-Bold"),
+    url("opensansbold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: local("Open Sans Bold Italic"), local("OpenSans-BoldItalic"),
+    url("opensansbolditalic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: local("Open Sans Extrabold"), local("OpenSans-Extrabold"),
+    url("opensansextrabold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: local("Open Sans Extrabold Italic"), local("OpenSans-ExtraboldItalic"),
+    url("opensansextrabolditalic.woff2") format("woff2");
+  font-weight: 800;
+  font-style: italic;
+}
