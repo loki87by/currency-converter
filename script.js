@@ -108,17 +108,11 @@ getRates()
   .then(res => {
     rates = res.rates;
   })
-  .catch(err => {
-    console.log(err);
-  });
 getLocalCurrency()
   .then(res => {
     localCurrency = res.currency;
     renderPlaceholder(res.currency)
   })
-  .catch(err => {
-    console.log(err);
-  });
 getAllCurrencies()
   .then(res => {
     allCurrencies = res.currencies
@@ -127,6 +121,3 @@ getAllCurrencies()
     targetCurrencies = Object.keys(res.currencies).filter(cur => cur !== localCurrency);
     renderOptions(targetCurrencies, targetedSelect, targetCurrency)
   })
-  .catch(err => {
-    console.log(err);
-  });
