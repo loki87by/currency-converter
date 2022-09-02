@@ -1,7 +1,7 @@
 {
   "name": "currency-converter",
   "version": "0.0.1",
-  "description": "test on Vue.js for ecwid inc.",
+  "description": "test on Vue.js",
   "author": "Aleksey Akulich <loki87by.github.com>",
   "private": true,
   "scripts": {
