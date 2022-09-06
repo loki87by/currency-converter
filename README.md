@@ -33,7 +33,7 @@
 - Установите зависимости: `npm install`.
 - Запустите приложение: `npm start`
 
- Деплой [тут:](currency-converter-ang.netlify.app/) 
+ Деплой [тут:](https://currency-converter-ang.netlify.app/) 
 </details>
 
 - ### Vue
@@ -50,7 +50,7 @@
 - Установите зависимости: `npm install`.
 - Запустите приложение: `npm start`
 
- Деплой [тут:](currency-converter-vue.netlify.app/) 
+ Деплой [тут:](https://currency-converter-vue.netlify.app/) 
 </details>
 
 - ### Native
@@ -64,5 +64,5 @@
 - Перейдите в загруженную папку: `cd currency-converter`.
 - Запустите локальный сервер вашей IDE (vsc, webstorm, etc.).
 
- Деплой [тут:](currency-converter-vanilla.netlify.app/) 
+ Деплой [тут:](https://currency-converter-vanilla.netlify.app/) 
 </details>
