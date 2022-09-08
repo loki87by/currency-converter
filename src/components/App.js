@@ -2,7 +2,8 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import Background from "./Background";
-import { getLocalCurrency, getRates, getAllCurrencies } from "../utils/Api";
+import { CURRENCIES_AND_COUNTRIES } from "../utils/consts";
+import { getLocal, getRates, getAllCurrencies } from "../utils/Api";
 
 function App() {
   const [currenciesList, setCurrenciesList] = useState({});
@@ -11,18 +12,34 @@ function App() {
   const [targetCurrency, setTargetCurrency] = useState("USD");
   const [baseValue, setBaseValue] = useState(0);
   const [targetValue, setTargetValue] = useState(0);
+  const geo = navigator.geolocation;
+
+  function currencyFromCountry(arg) {
+    let index = CURRENCIES_AND_COUNTRIES.findIndex((item) => item[0] === arg);
+
+    if (!index) {
+      index = CURRENCIES_AND_COUNTRIES.findIndex((item) => item[1] === arg);
+    }
+    setLocalCurrency(CURRENCIES_AND_COUNTRIES[index][2])
+  }
 
   useEffect(() => {
-    getRates().then((res) => {
-      setRates(res.rates);
-    });
-    getLocalCurrency().then((res) => {
-      setLocalCurrency(res.currency);
-    });
-    getAllCurrencies().then((res) => {
-      setCurrenciesList(res.currencies);
-    });
-  }, []);
+
+    if (geo) {
+      geo.getCurrentPosition((position) => {
+        const { coords } = position;
+        getLocal(coords.latitude, coords.longitude).then((res) => {
+          currencyFromCountry(res.sys.country);
+          getRates().then((res) => {
+            setRates(res.rates);
+          });
+          getAllCurrencies().then((res) => {
+            setCurrenciesList(res.currencies);
+          });
+        });
+      });
+    }
+  }, [geo]);
 
   function changeTargetValue(args) {
     const { thisValue, thisCurrency, thisRates } = args;
