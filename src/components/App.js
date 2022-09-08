@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect, useCallback } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Background from "./Background";
@@ -14,6 +14,19 @@ function App() {
   const [targetValue, setTargetValue] = useState(0);
   const geo = navigator.geolocation;
 
+  const setCurrencies = useCallback(() => {
+    getRates().then((res) => {
+
+      if (localCurrency === '') {
+        setLocalCurrency(Object.keys(res.rates)[0])
+      }
+      setRates(res.rates);
+    });
+    getAllCurrencies().then((res) => {
+      setCurrenciesList(res.currencies);
+    });
+  }, [localCurrency])
+
   function currencyFromCountry(arg) {
     let index = CURRENCIES_AND_COUNTRIES.findIndex((item) => item[0] === arg);
 
@@ -24,22 +37,26 @@ function App() {
   }
 
   useEffect(() => {
+    setCurrencies()
+  }, [setCurrencies])
+
+  useEffect(() => {
 
     if (geo) {
       geo.getCurrentPosition((position) => {
         const { coords } = position;
         getLocal(coords.latitude, coords.longitude).then((res) => {
           currencyFromCountry(res.sys.country);
-          getRates().then((res) => {
-            setRates(res.rates);
-          });
-          getAllCurrencies().then((res) => {
-            setCurrenciesList(res.currencies);
-          });
+          setCurrencies()
         });
+      },
+      function (error) {
+        if (error.PERMISSION_DENIED) {
+          setCurrencies();
+        }
       });
     }
-  }, [geo]);
+  }, [geo, setCurrencies]);
 
   function changeTargetValue(args) {
     const { thisValue, thisCurrency, thisRates } = args;
