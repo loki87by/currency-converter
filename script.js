@@ -1,11 +1,14 @@
-import { createElement, renderOptions, renderTotalText, renderPlaceholder } from "./src/utils/helpers.js";
 import {
-  getLocalCurrency,
-  getRates,
-  getAllCurrencies
-} from "./src/components/Api.js";
+  createElement,
+  renderOptions,
+  renderTotalText,
+  renderPlaceholder,
+} from "./src/utils/helpers.js";
+import { getRates, getAllCurrencies, getLocal } from "./src/components/Api.js";
+import { CURRENCIES_AND_COUNTRIES } from "./src/utils/consts.js";
 import Background from "./src/components/Background.js";
 
+const geo = navigator.geolocation;
 const body = document.querySelector("body");
 const background = new Background(body);
 let rates = {};
@@ -16,6 +19,24 @@ let targetValue = 0;
 let allCurrencies = [];
 let basedCurrencies = [];
 let targetCurrencies = [];
+
+function currencyFromCountry(arg) {
+  let index = CURRENCIES_AND_COUNTRIES.findIndex((item) => item[0] === arg);
+  if (!index) {
+    index = CURRENCIES_AND_COUNTRIES.findIndex((item) => item[1] === arg);
+  }
+  renderPlaceholder(CURRENCIES_AND_COUNTRIES[index][2]);
+  localCurrency = CURRENCIES_AND_COUNTRIES[index][2];
+}
+
+if (geo) {
+  geo.getCurrentPosition((position) => {
+    const { coords } = position;
+    getLocal(coords.latitude, coords.longitude).then((res) => {
+      currencyFromCountry(res.sys.country);
+    });
+  });
+}
 
 function changeTargetValue(args) {
   const { thisValue, thisCurrency, thisRates } = args;
@@ -37,16 +58,18 @@ function changeTargetValue(args) {
   const newValue =
     Math.floor((currentValue / currentRates[currentCurrency]) * 100) / 100;
   targetValue = newValue;
-  renderTotalText(baseValue, targetValue, targetCurrency)
+  renderTotalText(baseValue, targetValue, targetCurrency);
 }
 
 function changeCurrency(e) {
   const newValue = e.target.value;
   localCurrency = newValue;
-  renderPlaceholder(newValue)
+  renderPlaceholder(newValue);
   changeTargetValue({ thisCurrency: newValue });
-  targetCurrencies = Object.keys(allCurrencies).filter(cur => cur !== localCurrency);
-  renderOptions(targetCurrencies, targetedSelect, targetCurrency)
+  targetCurrencies = Object.keys(allCurrencies).filter(
+    (cur) => cur !== localCurrency
+  );
+  renderOptions(targetCurrencies, targetedSelect, targetCurrency);
 }
 
 function changeBaseValue(e) {
@@ -58,7 +81,7 @@ function changeBaseValue(e) {
 function changeTargetedCurrency(e) {
   const newValue = e.target.value;
   targetCurrency = newValue;
-  getRates(newValue).then(res => {
+  getRates(newValue).then((res) => {
     rates = res.rates;
     changeTargetValue({ thisRates: res.rates });
   });
@@ -71,13 +94,13 @@ const page = createElement("section", { class: "page" }, body);
 createElement("h2", {}, page, "Выберите вашу валюту");
 const basedSelect = createElement("select", {}, page);
 basedSelect.addEventListener("change", changeCurrency);
-renderOptions(basedCurrencies, basedSelect, localCurrency)
+renderOptions(basedCurrencies, basedSelect, localCurrency);
 const input = createElement(
   "input",
   {
     type: "number",
     value: baseValue > 0 ? baseValue : "",
-    placeholder: `Сколько у вас ${localCurrency}`
+    placeholder: `Сколько у вас ${localCurrency}`,
   },
   page
 );
@@ -85,39 +108,29 @@ input.addEventListener("input", changeBaseValue);
 createElement("h2", {}, page, "Выберите нужную валюту");
 const targetedSelect = createElement("select", {}, page);
 targetedSelect.addEventListener("change", changeTargetedCurrency);
-renderOptions(targetCurrencies, targetedSelect, targetCurrency)
-createElement(
-  "h3",
-  {id: 'total'},
-  page,
-  ""
-);
+renderOptions(targetCurrencies, targetedSelect, targetCurrency);
+createElement("h3", { id: "total" }, page, "");
 const footer = createElement("footer", {}, body);
 createElement(
   "a",
   {
     rel: "noopener noreferrer",
     href: "https://loki87by.github.io/portfolio/",
-    target: "_blank"
+    target: "_blank",
   },
   footer,
   "©2022 Алексей Акулич"
 );
 
-getRates()
-  .then(res => {
-    rates = res.rates;
-  })
-getLocalCurrency()
-  .then(res => {
-    localCurrency = res.currency;
-    renderPlaceholder(res.currency)
-  })
-getAllCurrencies()
-  .then(res => {
-    allCurrencies = res.currencies
-    basedCurrencies = Object.keys(res.currencies)
-    renderOptions(basedCurrencies, basedSelect, localCurrency)
-    targetCurrencies = Object.keys(res.currencies).filter(cur => cur !== localCurrency);
-    renderOptions(targetCurrencies, targetedSelect, targetCurrency)
-  })
+getRates().then((res) => {
+  rates = res.rates;
+});
+getAllCurrencies().then((res) => {
+  allCurrencies = res.currencies;
+  basedCurrencies = Object.keys(res.currencies);
+  renderOptions(basedCurrencies, basedSelect, localCurrency);
+  targetCurrencies = Object.keys(res.currencies).filter(
+    (cur) => cur !== localCurrency
+  );
+  renderOptions(targetCurrencies, targetedSelect, targetCurrency);
+});

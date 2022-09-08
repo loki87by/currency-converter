@@ -11,17 +11,17 @@ export function getAllCurrencies() {
   return fetch("https://api.apilayer.com/currency_data/list", {
     method: "GET",
     headers: {
-      apikey: apiKey
-    }
+      apikey: apiKey,
+    },
   })
-    .then(response => {
+    .then((response) => {
       if (response.ok) {
         return response.json();
       } else {
         alert(sorry);
       }
     })
-    .catch(error => console.log("error", error));
+    .catch((error) => console.log("error", error));
 }
 
 export function getRates(currency) {
@@ -35,30 +35,31 @@ export function getRates(currency) {
     {
       method: "GET",
       headers: {
-        apikey: apiKey
-      }
+        apikey: apiKey,
+      },
     }
   )
-    .then(response => {
+    .then((response) => {
       if (response.ok) {
         return response.json();
       } else {
         alert(sorry);
       }
     })
-    .catch(error => console.log("error", error));
+    .catch((error) => console.log("error", error));
 }
 
-export function getLocalCurrency() {
-  return fetch("http://ip-api.com/json?fields=currency", {
-    method: "GET"
+export function getLocal(lat, lon) {
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=b91d3843eaeb709975d89c9061d73042&units=metric&lang=en`;
+  return fetch(url, {
+    method: "GET",
   })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        alert(sorry);
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
       }
     })
-    .catch(error => console.log("error", error));
+    .catch((e) => {
+      return e;
+    });
 }
