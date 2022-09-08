@@ -49,16 +49,17 @@ export function getRates(currency) {
     .catch(error => console.log("error", error));
 }
 
-export function getLocalCurrency() {
-  return fetch("http://ip-api.com/json?fields=currency", {
-    method: "GET"
+export function getLocal(lat, lon) {
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=b91d3843eaeb709975d89c9061d73042&units=metric&lang=en`;
+  return fetch(url, {
+    method: "GET",
   })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        alert(sorry);
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
       }
     })
-    .catch(error => console.log("error", error));
+    .catch((e) => {
+      return e;
+    });
 }

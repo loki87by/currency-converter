@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { getLocalCurrency, getRates, getAllCurrencies } from "../utils/Api";
+import { getLocal, getRates, getAllCurrencies } from "../utils/Api";
 import { CurrenciesList, CurrentRates } from "../utils/types";
+import { CURRENCIES_AND_COUNTRIES } from "../utils/consts";
 
 @Component({
   selector: "main-comp",
@@ -46,6 +47,14 @@ export class MainComponent implements OnInit {
   targetValue: number = 0;
   basedCurrencies: string[] = [];
   targetCurrencies: string[] = [];
+
+  currencyFromCountry(arg) {
+    let index = CURRENCIES_AND_COUNTRIES.findIndex((item) => item[0] === arg);
+    if (!index) {
+      index = CURRENCIES_AND_COUNTRIES.findIndex((item) => item[1] === arg);
+    }
+    this.localCurrency = CURRENCIES_AND_COUNTRIES[index][2];
+  }
 
   changeTargetValue(args) {
     const { thisValue, thisCurrency, thisRates } = args;
@@ -104,20 +113,25 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
-    getRates().then((res) => {
-      this.rates = res.rates;
-    });
-    getLocalCurrency().then((res) => {
-      this.localCurrency = res.currency;
-    });
-    getAllCurrencies().then((res) => {
-      this.currenciesList = res.currencies;
-      this.basedCurrencies = Object.keys(res.currencies).filter(
-        (cur) => cur !== this.localCurrency
-      );
-      this.targetCurrencies = Object.keys(res.currencies).filter(
-        (cur) => cur !== this.localCurrency || this.targetCurrency
-      );
-    });
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { coords } = position;
+        getLocal(coords.latitude, coords.longitude).then((res) => {
+          this.currencyFromCountry(res.sys.country);
+          getRates().then((res) => {
+            this.rates = res.rates;
+          });
+          getAllCurrencies().then((res) => {
+            this.currenciesList = res.currencies;
+            this.basedCurrencies = Object.keys(res.currencies).filter(
+              (cur) => cur !== this.localCurrency
+            );
+            this.targetCurrencies = Object.keys(res.currencies).filter(
+              (cur) => cur !== this.localCurrency || this.targetCurrency
+            );
+          });
+        });
+      });
+    }
   }
 }
