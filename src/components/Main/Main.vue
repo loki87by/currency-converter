@@ -106,6 +106,7 @@ export default {
         this.changeTargetValue({ thisRates: res.rates })
       })
     },
+
     stringifyBigValue: function (num) {
       const integer = Math.floor(num)
       const fraction = (Math.floor((integer - num) * 100) / 100 + '').split(
@@ -123,30 +124,42 @@ export default {
       return `${intString}.${fraction[1]}`
     },
 
+    setCurrencies: function () {
+      getRates().then((res) => {
+        if (this.localCurrency === '') {
+          this.localCurrency = Object.keys(res.rates)[0]
+        }
+        this.rates = res.rates
+      })
+      getAllCurrencies().then((res) => {
+        this.currenciesList = res.currencies
+        this.basedCurrencies = Object.keys(res.currencies).filter(
+          cur => cur !== this.localCurrency
+        )
+        this.targetCurrencies = Object.keys(res.currencies).filter(
+          cur => cur !== this.localCurrency || this.targetCurrency
+        )
+      })
+    },
+
     init: function () {
       const { coords } = this.location
       getLocal(coords.latitude, coords.longitude).then(res => {
         this.currencyFromCountry(res.sys.country)
-        getRates().then(res => {
-          this.rates = res.rates
-        })
-        getAllCurrencies().then(res => {
-          this.currenciesList = res.currencies
-          this.basedCurrencies = Object.keys(res.currencies).filter(
-            cur => cur !== this.localCurrency
-          )
-          this.targetCurrencies = Object.keys(res.currencies).filter(
-            cur => cur !== this.localCurrency || this.targetCurrency
-          )
-        })
+        this.setCurrencies()
       })
     }
   },
+
   mounted () {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
         this.location = position
         this.init()
+      }, error => {
+        if (error.PERMISSION_DENIED) {
+          this.setCurrencies()
+        }
       })
     }
   }
