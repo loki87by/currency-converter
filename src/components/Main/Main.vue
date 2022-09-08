@@ -37,11 +37,8 @@
 </template>
 
 <script>
-import {
-  getLocalCurrency,
-  getRates,
-  getAllCurrencies
-} from '../../utils/Api.js'
+import { getLocal, getRates, getAllCurrencies } from '../../utils/Api.js'
+import { CURRENCIES_AND_COUNTRIES } from '../../utils/consts.js'
 
 export default {
   name: 'Main',
@@ -54,10 +51,19 @@ export default {
       baseValue: 0,
       targetValue: 0,
       basedCurrencies: [],
-      targetCurrencies: []
+      targetCurrencies: [],
+      location: null
     }
   },
   methods: {
+    currencyFromCountry: function (arg) {
+      let index = CURRENCIES_AND_COUNTRIES.findIndex(item => item[0] === arg)
+      if (!index) {
+        index = CURRENCIES_AND_COUNTRIES.findIndex(item => item[1] === arg)
+      }
+      this.localCurrency = CURRENCIES_AND_COUNTRIES[index][2]
+    },
+
     changeTargetValue: function (args) {
       const { thisValue, thisCurrency, thisRates } = args
       let currentValue = this.baseValue
@@ -116,26 +122,33 @@ export default {
       const intString = stringifyIntegerArray.join('')
       return `${intString}.${fraction[1]}`
     },
+
     init: function () {
-      getRates().then(res => {
-        this.rates = res.rates
-      })
-      getLocalCurrency().then(res => {
-        this.localCurrency = res.currency
-      })
-      getAllCurrencies().then(res => {
-        this.currenciesList = res.currencies
-        this.basedCurrencies = Object.keys(res.currencies).filter(
-          cur => cur !== this.localCurrency
-        )
-        this.targetCurrencies = Object.keys(res.currencies).filter(
-          cur => cur !== this.localCurrency || this.targetCurrency
-        )
+      const { coords } = this.location
+      getLocal(coords.latitude, coords.longitude).then(res => {
+        this.currencyFromCountry(res.sys.country)
+        getRates().then(res => {
+          this.rates = res.rates
+        })
+        getAllCurrencies().then(res => {
+          this.currenciesList = res.currencies
+          this.basedCurrencies = Object.keys(res.currencies).filter(
+            cur => cur !== this.localCurrency
+          )
+          this.targetCurrencies = Object.keys(res.currencies).filter(
+            cur => cur !== this.localCurrency || this.targetCurrency
+          )
+        })
       })
     }
   },
   mounted () {
-    this.init()
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.location = position
+        this.init()
+      })
+    }
   }
 }
 </script>
