@@ -29,15 +29,6 @@ function currencyFromCountry(arg) {
   localCurrency = CURRENCIES_AND_COUNTRIES[index][2];
 }
 
-if (geo) {
-  geo.getCurrentPosition((position) => {
-    const { coords } = position;
-    getLocal(coords.latitude, coords.longitude).then((res) => {
-      currencyFromCountry(res.sys.country);
-    });
-  });
-}
-
 function changeTargetValue(args) {
   const { thisValue, thisCurrency, thisRates } = args;
   let currentValue = baseValue;
@@ -122,15 +113,40 @@ createElement(
   "©2022 Алексей Акулич"
 );
 
-getRates().then((res) => {
-  rates = res.rates;
-});
-getAllCurrencies().then((res) => {
-  allCurrencies = res.currencies;
-  basedCurrencies = Object.keys(res.currencies);
-  renderOptions(basedCurrencies, basedSelect, localCurrency);
-  targetCurrencies = Object.keys(res.currencies).filter(
-    (cur) => cur !== localCurrency
+function setCurrencies(init) {
+  getRates().then((res) => {
+    rates = res.rates;
+
+    if (init) {
+      renderPlaceholder(Object.keys(res.rates)[0]);
+    }
+    getAllCurrencies().then((res) => {
+      allCurrencies = res.currencies;
+      basedCurrencies = Object.keys(res.currencies);
+      renderOptions(basedCurrencies, basedSelect, localCurrency);
+      targetCurrencies = Object.keys(res.currencies).filter(
+        (cur) => cur !== localCurrency
+      );
+      renderOptions(targetCurrencies, targetedSelect, targetCurrency);
+    });
+  });
+}
+
+setCurrencies(true);
+
+if (geo) {
+  geo.getCurrentPosition(
+    (position) => {
+      const { coords } = position;
+      getLocal(coords.latitude, coords.longitude).then((res) => {
+        currencyFromCountry(res.sys.country);
+        setCurrencies();
+      });
+    },
+    function (error) {
+      if (error.PERMISSION_DENIED) {
+        setCurrencies(true);
+      }
+    }
   );
-  renderOptions(targetCurrencies, targetedSelect, targetCurrency);
-});
+}
