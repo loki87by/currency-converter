@@ -8,7 +8,7 @@ import { CURRENCIES_AND_COUNTRIES } from "../utils/consts";
   template: `<main>
     <div class="page">
       <h2>Выберите вашу валюту</h2>
-      <select value="{{ localCurrency }}" (change)="changeCurrency($event)">
+      <select (change)="changeCurrency($event)">
         <option value="{{ localCurrency }}">{{ localCurrency }}</option>
         <option *ngFor="let item of basedCurrencies" value="{{ item }}">
           {{ item }}
@@ -16,14 +16,13 @@ import { CURRENCIES_AND_COUNTRIES } from "../utils/consts";
       </select>
       <input
         type="number"
-        value="{{ baseValue }}"
+        value="{{baseValue}}"
         placeholder="Сколько у вас {{ localCurrency }}"
         [(ngModel)]="baseValue"
         (input)="changeBaseValue()"
       />
       <h2>Выберите нужную валюту</h2>
       <select
-        value="{{ targetCurrency }}"
         (change)="changeTargetedCurrency($event)"
       >
         <option value="{{ targetCurrency }}">{{ targetCurrency }}</option>
@@ -43,7 +42,7 @@ export class MainComponent implements OnInit {
   rates: CurrentRates = {};
   localCurrency: string = "";
   targetCurrency: string = "USD";
-  baseValue: number = 0;
+  baseValue: number|string = '';
   targetValue: number = 0;
   basedCurrencies: string[] = [];
   targetCurrencies: string[] = [];
@@ -64,6 +63,8 @@ export class MainComponent implements OnInit {
 
     if (thisValue) {
       currentValue = thisValue;
+    } else {
+      currentValue = 0;
     }
 
     if (thisCurrency) {
@@ -74,7 +75,7 @@ export class MainComponent implements OnInit {
       currentRates = thisRates;
     }
     const newValue =
-      Math.floor((currentValue / currentRates[currentCurrency]) * 100) / 100;
+      Math.floor(((currentValue as number) / currentRates[currentCurrency]) * 100) / 100;
     this.targetValue = newValue;
   }
 
@@ -112,26 +113,35 @@ export class MainComponent implements OnInit {
     return `${intString}.${fraction[1]}`;
   }
 
+  setCurrencies() {
+    getRates().then((res) => {
+
+      if (this.localCurrency === '') {
+        this.localCurrency = Object.keys(res.rates)[0]
+      }
+      this.rates = res.rates;
+    });
+    getAllCurrencies().then((res) => {
+      this.currenciesList = res.currencies;
+    });
+  }
+
   ngOnInit() {
+    this.setCurrencies();
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         const { coords } = position;
         getLocal(coords.latitude, coords.longitude).then((res) => {
           this.currencyFromCountry(res.sys.country);
-          getRates().then((res) => {
-            this.rates = res.rates;
-          });
-          getAllCurrencies().then((res) => {
-            this.currenciesList = res.currencies;
-            this.basedCurrencies = Object.keys(res.currencies).filter(
-              (cur) => cur !== this.localCurrency
-            );
-            this.targetCurrencies = Object.keys(res.currencies).filter(
-              (cur) => cur !== this.localCurrency || this.targetCurrency
-            );
-          });
+          this.setCurrencies()
         });
-      });
-    }
+      }/* ,
+      function (error) {
+        if (error.PERMISSION_DENIED) {
+          this.setCurrencies();
+        }
+      }; */
+    )}
   }
 }
