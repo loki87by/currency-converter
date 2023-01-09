@@ -66,3 +66,5 @@
 
  Деплой [тут:](https://currency-converter-vanilla.netlify.app/) 
 </details>
+
+### Так же на основе данного проекта создано расширение для браузера Google Chrome, исходный код [здесь:](https://github.com/loki87by/currency-chrome-extension)
